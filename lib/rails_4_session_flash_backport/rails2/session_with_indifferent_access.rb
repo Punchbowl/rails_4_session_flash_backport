@@ -22,6 +22,7 @@ module ActionController::Session
 
         def []=(key, value)
           load! unless @loaded
+          delete(key) if key.is_a? Symbol
           super(key.to_s, value)
         end
 
