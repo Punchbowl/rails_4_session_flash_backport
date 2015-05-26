@@ -31,8 +31,13 @@ module ActionController #:nodoc:
 
       def to_session_value
         return nil if empty?
-        discard = @used.select { |key, used| used }.keys
-        {'flashes' => Hash[to_a].except(*discard)}
+        discard = @used.select { |key, used| used }
+        if discard.is_a? Array
+          discard_keys = discard.map(&:first)
+        else
+          discard_keys = discard.keys
+        end
+        {'flashes' => Hash[to_a].except(*discard_keys)}
       end
 
       def store(session, key = "flash")
